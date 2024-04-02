@@ -20,61 +20,62 @@
             <h1>Heading</h1>
         </div>
         <div class="col m-auto" style="text-align: right;">
-            <button class="btn btn-primary" type="button">Button</button>
+            <a class="btn btn-primary" href="/logout" role="button">Logout</a>
         </div>
     </div>
-    <div class="row" style="height: 66.8px;background: #a5dde2;">
-        <div class="col-auto m-auto"><input type="date" style="width: 167px;border-width: 1px;border-radius: 5px;">
-        </div>
-        <div class="col my-auto">
-            <h4>Date</h4>
-        </div>
-    </div>
-    <div class="row" style="height: 66.8px;background: #baead6;">
-        <div class="col-auto m-auto"><select style="width: 167px;border-width: 1px;border-radius: 5px;">
-            <optgroup label="This is a group">
-                <option value="12" selected="">This is item 1</option>
-                <option value="13">This is item 2</option>
-                <option value="14">This is item 3</option>
-            </optgroup>
-        </select></div>
-        <div class="col my-auto">
-            <h4>Exercise</h4>
-        </div>
-    </div>
-    <div class="row" style="height: 66.8px;background: #b5e2bf;">
-        <div class="col-auto m-auto"><select style="width: 167px;border-width: 1px;border-radius: 5px;">
-            <optgroup label="This is a group">
-                <option value="12" selected="">This is item 1</option>
-                <option value="13">This is item 2</option>
-                <option value="14">This is item 3</option>
-            </optgroup>
-        </select></div>
-        <div class="col my-auto" style="text-align: left;">
-            <h4>Sets</h4>
-        </div>
-    </div>
-    <div class="row" style="height: 66.8px;background: #b5e8bf;">
-        <div class="col-auto m-auto"><select style="width: 167px;border-width: 1px;border-radius: 5px;">
-            <optgroup label="This is a group">
-                <option value="12" selected="">This is item 1</option>
-                <option value="13">This is item 2</option>
-                <option value="14">This is item 3</option>
-            </optgroup>
-        </select></div>
-        <div class="col my-auto">
-            <h4>Repetitions</h4>
-        </div>
-    </div>
-    <div class="row" style="height: 47px;background: #c4d8e2;">
-        <div class="col my-auto" style="height: 37px;">
-            <button class="btn btn-primary" type="button">Add</button>
-        </div>
-    </div>
-    <div class="row" style="margin-top: 58px;background: #c4d8e2;">
-        <div class="col my-auto" style="margin-top: 0px;">
-            <button class="btn btn-primary" type="button">Home</button>
-        </div>
+    <div>
+        <form th:method="patch" th:action="@{/user/add}" th:object="${user}">
+<!--            <input type="hidden" th:field="${id}" th:value="${user.getId()}">-->
+            <fieldset>
+                <div class="row" style="height: 66.8px;background: #a5dde2;">
+                    <div class="col-auto m-auto">
+                        <input type="date" style="width: 167px;border-width: 1px;border-radius: 5px;">
+                    </div>
+                    <div class="col my-auto">
+                        <h4>Date</h4>
+                    </div>
+                </div>
+                <div class="row" style="height: 66.8px;background: #baead6;">
+                    <div class="col-auto m-auto" th:object="${exrs}">
+                        <select style="width: 167px;border-width: 1px;border-radius: 5px;">
+                            <option th:each="exercise : ${exercises}"
+                                    th:text="${exercise.getName()}"
+                            ></option>
+                        </select></div>
+                    <div class="col my-auto">
+                        <h4>Exercise</h4>
+                    </div>
+                </div>
+                <div class="row" style="height: 66.8px;background: #b5e2bf;">
+                    <div class="col-auto m-auto">
+                        <input type="number" name="sets" id="sets" step="1" min="1" max="100"
+                               style="width: 167px;border-width: 1px;border-radius: 5px;"/>
+                    </div>
+                    <div class="col my-auto" style="text-align: left;">
+                        <h4>Sets</h4>
+                    </div>
+                </div>
+                <div class="row" style="height: 66.8px;background: #b5e8bf;">
+                    <div class="col-auto m-auto">
+                        <input type="number" name="repetitions" id="repetitions" step="1" min="1" max="100"
+                               style="width: 167px;border-width: 1px;border-radius: 5px;"/>
+                    </div>
+                    <div class="col my-auto">
+                        <h4>Repetitions</h4>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="row" style="height: 47px;background: #c4d8e2;">
+                <div class="col my-auto" style="height: 37px;">
+                    <button class="btn btn-primary" type="submit">Add</button>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 58px;background: #c4d8e2;">
+                <div class="col my-auto" style="margin-top: 0px;">
+                    <a class="btn btn-primary" href="/user/" role="button">Home</a>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
