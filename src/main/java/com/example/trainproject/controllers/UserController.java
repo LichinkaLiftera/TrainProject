@@ -11,8 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-
 
 
 @Controller
@@ -29,30 +31,33 @@ public class UserController {
 
     @GetMapping
     public String getUser(Model map, Principal principal) {
-        User tempUser = userService.findByUsername(principal.getName());
-        Train tempTrain = new Train();
-        List<Exercise> exerciseList = exerciseService.getAllExercises();
-        map.addAttribute("user", tempUser);
-        map.addAttribute("exercises", exerciseList);
-        map.addAttribute("trains", tempTrain);
-        return "add-exercise";
+        map.addAttribute("user", userService.findByUsername(principal.getName()));
+        return "user-page";
     }
     @GetMapping("/{id}")
     public String userId(@PathVariable("id") long id, Model map){
         map.addAttribute("id", userService.getUserById(id));
-        return "user-page";
+        return "add-exercise";
     }
-//    @GetMapping("addTrain/{id}")
-//    public String addTrain(@PathVariable("id") long id,  Model map){
-//        List<Exercise> exerciseList = exerciseService.getAllExercises();
-//        map.addAttribute("exercises", exerciseList);
-//        map.addAttribute("user", userService.getUserById(id));
-//        return "add-exercise-page";
-//    }
-    @PostMapping("add")
-    public String recordTrain(@ModelAttribute("exercise") Exercise exercise){
-
-        return "redirect:/user/";
+    @GetMapping("addTrain/{id}")
+    public String addTrain(@PathVariable("id") long id,  Model map){
+        map.addAttribute("allExercises", exerciseService.getAllExercises());
+        map.addAttribute("user", userService.getUserById(id).get());
+        map.addAttribute("allTrains", userService.getUserById(id).get().getTrainList());
+        map.addAttribute("train", new Train(LocalDate.now().toString()));
+        map.addAttribute("exercise", new Exercise());
+        return "add-exercise";
+    }
+    @PostMapping("/{id}")
+    public String recordTrain(@PathVariable("id")long id,
+                              @ModelAttribute("train") Train train,
+                              @ModelAttribute("exercise") Exercise exercise){
+        System.out.println(train.getDate());
+        System.out.println(exercise.getName());
+        System.out.println(exercise.getSets());
+        System.out.println(exercise.getWeight());
+        System.out.println(exercise.getRepetitions());
+        return "redirect:addTrain/{id}";
     }
 
 

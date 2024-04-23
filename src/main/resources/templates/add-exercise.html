@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:form="http://www.w3.org/1999/html">
 
 <head>
     <meta charset="utf-8">
@@ -25,13 +25,12 @@
     </div>
     <div class="row">
         <div class="col">
-            <form th:method="patch" th:action="@{/user/add}" th:object="@{exercise}" >
+            <form th:method="patch" th:action="@{/user/{id}(id=${user.getId()})}">
                 <fieldset>
                     <div class="row" style="height: 60px;background: #a5dde2;">
-                        <div class="col-auto my-auto" style="width: 200px;">
-                            <input type="date"
-                                   style="width: 180px;border-width: 1px;border-radius: 5px;">
-
+                        <div  class="col-auto my-auto" style="width: 200px;">
+                            <input th:field="*{train.date}" type="date" th:value="${train.getDate()}"
+                                       style="width: 180px;border-width: 1px;border-radius: 5px;">
                         </div>
                         <div class="col text-start my-auto" style="width: 145px;">
                             <h4 style="width: 140px;">Date</h4>
@@ -39,9 +38,10 @@
                     </div>
                     <div class="row" style="height: 60px;background: #baead6;">
                         <div class="col-auto my-auto" style="width: 200px;">
-                            <select style="width: 180px;border-width: 1px;border-radius: 5px;">
-                                <option th:each="exercise : ${exercises}"
-                                        th:text="${exercise.getName()}"
+                            <select th:field="*{exercise.name}" style="width: 180px;border-width: 1px;border-radius: 5px;">
+                                <option th:each="exercises : ${allExercises}"
+                                        th:value="${exercises.getName()}"
+                                        th:text="${exercises.getName()}"
                                 ></option>
                             </select>
                         </div>
@@ -51,7 +51,7 @@
                     </div>
                     <div class="row" style="height: 60px;background: #b5e2bf;">
                         <div class="col-auto my-auto" style="width: 200px;">
-                            <input type="number" name="sets" id="Weight" step="1" min="1" max="505"
+                            <input th:field="*{exercise.weight}" type="number" step="1" min="1" max="505"
                                    style="width: 180px;border-width: 1px;border-radius: 5px;"/>
                         </div>
                         <div class="col my-auto" style="text-align: left;width: 145px;">
@@ -60,7 +60,7 @@
                     </div>
                     <div class="row" style="height: 60px;background: #b5e8bf;">
                         <div class="col-auto my-auto" style="width: 200px;">
-                            <input type="number" name="sets" id="sets" step="1" min="1" max="100"
+                            <input th:field="*{exercise.sets}" type="number"  step="1" min="1" max="100"
                                    style="width: 180px;border-width: 1px;border-radius: 5px;"/>
                         </div>
                         <div class="col my-auto" style="width: 145px;">
@@ -69,7 +69,7 @@
                     </div>
                     <div class="row" style="height: 60px;background: #aadd96;">
                         <div class="col-auto my-auto" style="width: 200px;">
-                            <input type="number" name="sets" id="repetitions" step="1" min="1" max="100"
+                            <input th:field="*{exercise.repetitions}" type="number"  step="1" min="1" max="100"
                                    style="width: 180px;border-width: 1px;border-radius: 5px;"/>
                         </div>
                         <div class="col my-auto" style="text-align: left;width: 145px;">
@@ -77,7 +77,6 @@
                         </div>
                     </div>
                 </fieldset>
-
                 <div class="row" style="height: 60px;">
                     <div class="col text-start mt-auto">
                         <button class="btn btn-primary btn-lg" type="submit">Add Ex</button>
@@ -95,9 +94,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="trtr : ${trains}">
+                    <tr th:each="trains : ${allTrains}">
                         <td th:utext="${trains.getDate()}"></td>
-                        <td th:utext="${trains.getTonnage()}"></td>
+<!--                        <td th:utext="${trains.getTonnage()}"></td>-->
                     </tr>
                     </tbody>
                 </table>
@@ -106,7 +105,7 @@
     </div>
     <div class="row" style="height: 100px;">
         <div class="col mt-auto" style="margin-top: 0px;">
-            <button class="btn btn-primary" type="button">Home</button>
+            <a class="btn btn-primary" href="/user/" role="button">Logout</a>
         </div>
     </div>
 </div>

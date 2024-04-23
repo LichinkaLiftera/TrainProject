@@ -23,60 +23,18 @@
             <a class="btn btn-primary" href="/logout" role="button">Logout</a>
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <form th:method="patch" th:action="@{/user/add}" th:object="${train}">
-                <fieldset>
-                    <div class="row" style="height: 66.8px;background: #baead6;">
-                        <div class="col-auto my-auto" style="width: 200px;">
-                            <input type="date" style="width: 180px;border-width: 1px;border-radius: 5px;">
-                        </div>
-                        <div class="col text-start my-auto" style="width: 145px;">
-                            <h4 style="width: 140px;">Date</h4>
-                        </div>
-                    </div>
-                    <div class="row" style="height: 66.8px;background: #baead6;">
-                        <div class="col-auto my-auto" style="width: 200px;">
-                            <select style="width: 180px;border-width: 1px;border-radius: 5px;">
-                                <option th:each="exercise : ${exercises}"
-                                        th:text="${exercise.getName()}"
-                                ></option>
-                            </select>
-                        </div>
-                        <div class="col my-auto" style="width: 145px;">
-                            <h4 style="width: 140px;">Exercise</h4>
-                        </div>
-                    </div>
-                    <div class="row" style="height: 66.8px;background: #b5e2bf;">
-                        <div class="col-auto my-auto" style="width: 200px;">
-                            <input type="number" name="sets" id="sets" step="1" min="1" max="100"
-                                   style="width: 180px;border-width: 1px;border-radius: 5px;"/>
-                        </div>
-                        <div class="col my-auto" style="text-align: left;width: 145px;">
-                            <h4 style="width: 140px;">Sets</h4>
-                        </div>
-                    </div>
-                    <div class="row" style="height: 66.8px;background: #b5e8bf;">
-                        <div class="col-auto my-auto" style="width: 200px;">
-                            <input type="number" name="repetitions" id="repetitions" step="1" min="1" max="100"
-                                   style="width: 180px;border-width: 1px;border-radius: 5px;"/>
-                        </div>
-                        <div class="col my-auto" style="width: 145px;">
-                            <h4 style="width: 140px;">Repetitions</h4>
-                        </div>
-                    </div>
-                </fieldset>
-
-
-                <div class="row" style="height: 47px;background: #c4d8e2;">
-                    <div class="col my-auto" style="height: 37px;">
-                        <button class="btn btn-primary" type="submit">Add</button>
-                    </div>
-                </div>
-            </form>
+    <div class="row" style="height: 200px;margin-top: 16px;background: #c4d8e2;">
+        <div class="col text-start mx-auto">
+            <div class="btn-group-vertical" role="group">
+                <form th:action="@{addTrain/{id}(id=${user.getId()})}" th:object="${user}">
+                    <button class="btn btn-primary" type="submit">Add</button>
+                </form>
+                <button class="btn btn-primary" type="button">Button 2</button>
+            </div>
         </div>
-        <div class="col mx-auto">
-            <div class="table-responsive text-start m-auto" style="background: #b5e8bf;">
+    <div class="col mx-auto">
+        <form>
+            <div class="table-responsive" style="border-radius: 7px;background: #b5e8bf;border-width: 1px;">
                 <table class="table table-striped-columns">
                     <thead class="shadow-sm" style="background: #96d8af;font-weight: bold;">
                     <tr>
@@ -89,17 +47,12 @@
                         <td th:utext="${trains.getDate()}"></td>
                         <td th:utext="${trains.getTonnage()}"></td>
                     </tr>
-
                     </tbody>
                 </table>
             </div>
-        </div>
+        </form>
     </div>
-    <div class="row" style="height: 100px;">
-        <div class="col my-auto" style="margin-top: 0px;">
-            <button class="btn btn-primary" type="button">Home</button>
-        </div>
-    </div>
+</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
