@@ -43,9 +43,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="trtr : ${trains}">
-                        <td th:utext="${trains.getDate()}"></td>
-                        <td th:utext="${trains.getTonnage()}"></td>
+                    <tr th:each="train : ${allTrains}">
+                        <td th:utext="${train.getDate()}"></td>
+                        <td th:utext="${train.getTonnage()}"></td>
                     </tr>
                     </tbody>
                 </table>

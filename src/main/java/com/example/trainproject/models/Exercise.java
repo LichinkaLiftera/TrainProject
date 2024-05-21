@@ -16,12 +16,13 @@ import lombok.ToString;
 @Table(name = "Exercises")
 public class Exercise {
 
-    public Exercise(String name, int weight, int sets, int repetitions){
+    public Exercise(long id,String name, double weight, int sets, int repetitions){
+        this.id = id;
         this.name = name;
         this.weight = weight;
         this.sets = sets;
         this.repetitions = repetitions;
-        this.tonnage = weight * sets * repetitions;
+        this.tonnage = sets * repetitions * weight;
     }
 
     @Id
@@ -38,9 +39,9 @@ public class Exercise {
     private int repetitions;
 
     @Transient
-    private int weight;
+    private double weight;
 
     @Transient
-    private int tonnage;
+    private double tonnage;
 
 }

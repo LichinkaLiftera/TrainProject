@@ -1,5 +1,6 @@
 package com.example.trainproject.service;
 
+import com.example.trainproject.models.Train;
 import com.example.trainproject.models.User;
 import java.util.List;
 import java.util.Optional;
@@ -11,5 +12,7 @@ public interface UserService {
     Optional<User>getUserById(long id);
     List<User> getAllUsers();
     void deleteUser(long id);
+    Boolean haveTrainToday(User user, String strDate);
+    Train getUserTrainByDate(User user,String date);
 
 }

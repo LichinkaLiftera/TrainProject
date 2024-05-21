@@ -1,10 +1,12 @@
 package com.example.trainproject.service;
 
 import com.example.trainproject.dao.UserDao;
+import com.example.trainproject.models.Train;
 import com.example.trainproject.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,5 +46,16 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteUser(long id) {
         userDao.deleteById(id);
+    }
+
+    @Override
+    public Boolean haveTrainToday(User user, String strDate) {
+        return user.getTrainList().stream()
+                .anyMatch(tr -> tr.getDate().equals(strDate));
+    }
+    @Override
+    public Train getUserTrainByDate(User user, String date) {
+        return user.getTrainList().stream()
+                .filter(tr -> tr.getDate().equals(date)).findFirst().get();
     }
 }

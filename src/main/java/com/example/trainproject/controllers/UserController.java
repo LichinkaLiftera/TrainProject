@@ -4,17 +4,24 @@ import com.example.trainproject.models.Exercise;
 import com.example.trainproject.models.Train;
 import com.example.trainproject.models.User;
 import com.example.trainproject.service.ExerciseService;
+import com.example.trainproject.service.TrainService;
 import com.example.trainproject.service.UserService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.GsonJsonParser;
+import org.springframework.boot.json.JsonParseException;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -22,43 +29,89 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final ExerciseService exerciseService;
+    private final TrainService trainService;
 
     @Autowired
-    public UserController(UserService userService, ExerciseService exerciseService) {
+    public UserController(UserService userService, ExerciseService exerciseService, TrainService trainService) {
         this.userService = userService;
         this.exerciseService = exerciseService;
+        this.trainService = trainService;
     }
 
     @GetMapping
     public String getUser(Model map, Principal principal) {
         map.addAttribute("user", userService.findByUsername(principal.getName()));
+        map.addAttribute("allTrains", userService.findByUsername(principal.getName()).getTrainList());
         return "user-page";
     }
+
     @GetMapping("/{id}")
-    public String userId(@PathVariable("id") long id, Model map){
+    public String userId(@PathVariable("id") long id, Model map) {
         map.addAttribute("id", userService.getUserById(id));
         return "add-exercise";
     }
+
     @GetMapping("addTrain/{id}")
-    public String addTrain(@PathVariable("id") long id,  Model map){
+    public String addTrain(@PathVariable("id") long id, Model map) {
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        User tempUser = userService.getUserById(id).get();
+        Train tempTrain = new Train(LocalDate.now().toString());
+        List<Exercise> tempExerciseList = tempTrain.getExercisesList();
+
+        if (userService.haveTrainToday(tempUser, tempTrain.getDate())) {
+            tempTrain = userService.getUserTrainByDate(tempUser, tempTrain.getDate());
+            tempExerciseList = tempTrain.getExercisesList(gson, tempTrain.getExercises());
+        }
+//        else {
+//            tempUser.getTrainList().add(tempTrain);
+//            userService.updateUser(tempUser);
+//        }
+
         map.addAttribute("allExercises", exerciseService.getAllExercises());
-        map.addAttribute("user", userService.getUserById(id).get());
-        map.addAttribute("allTrains", userService.getUserById(id).get().getTrainList());
-        map.addAttribute("train", new Train(LocalDate.now().toString()));
+        map.addAttribute("user", tempUser);
+        map.addAttribute("train", tempTrain);
         map.addAttribute("exercise", new Exercise());
+        map.addAttribute("userExercises", tempExerciseList);
+
         return "add-exercise";
     }
+
     @PostMapping("/{id}")
-    public String recordTrain(@PathVariable("id")long id,
+    public String recordTrain(@PathVariable("id") long id,
                               @ModelAttribute("train") Train train,
-                              @ModelAttribute("exercise") Exercise exercise){
-        System.out.println(train.getDate());
-        System.out.println(exercise.getName());
-        System.out.println(exercise.getSets());
-        System.out.println(exercise.getWeight());
-        System.out.println(exercise.getRepetitions());
+                              @ModelAttribute("exercise") Exercise exercise) {
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Train tempTrain = new Train(train.getDate());
+        Exercise tempExercise = new Exercise(exercise.getId(), exercise.getName(),
+                exercise.getWeight(), exercise.getSets(), exercise.getRepetitions());
+
+        if (userService.haveTrainToday(userService.getUserById(id).get(), train.getDate())) {
+            tempTrain = userService.getUserTrainByDate(userService.getUserById(id).get(), train.getDate());
+            trainService.updateTrain(tempTrain, tempExercise, gson);
+        } else {
+            trainService.createTrain(tempTrain, tempExercise, gson);
+            userService.getUserById(id).get().getTrainList().add(tempTrain);
+            userService.updateUser(userService.getUserById(id).get());
+        }
+
+
+//        if(userService.haveTrainToday(tempUser,tempTrain.getDate())) {
+//            tempTrain = userService.getUserTrainByDate(tempUser,tempTrain.getDate());
+//            String str = tempTrain.getExercises();
+//            tempTrain.setExercisesList(gson.fromJson(str, new TypeToken<ArrayList<Exercise>>(){}.getType()));
+//            tempTrain.getExercisesList().add(tempExercise);
+//            tempTrain.updateTonnage();
+//            tempTrain.setExercises(gson.toJson(tempTrain.getExercisesList()));
+//            trainService.updateTrain(tempTrain);
+//        } else {
+//            tempTrain.getExercisesList().add(tempExercise);
+//            tempTrain.setExercises(gson.toJson(tempTrain.getExercisesList()));
+//            tempTrain.updateTonnage();
+//            tempUser.getTrainList().add(tempTrain);
+//            userService.updateUser(tempUser);
+//        }
         return "redirect:addTrain/{id}";
     }
-
-
 }
