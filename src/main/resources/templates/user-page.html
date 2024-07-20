@@ -26,7 +26,7 @@
     <div class="row" style="height: 200px;margin-top: 16px;background: #c4d8e2;">
         <div class="col text-start mx-auto">
             <div class="btn-group-vertical" role="group">
-                <form th:action="@{addTrain/{id}(id=${user.getId()})}" th:object="${user}">
+                <form th:action="@{editTrain/{id}(id=${user.getId()})}" th:object="${user}">
                     <button class="btn btn-primary" type="submit">Add</button>
                 </form>
                 <button class="btn btn-primary" type="button">Button 2</button>

@@ -8,20 +8,14 @@ import com.example.trainproject.service.TrainService;
 import com.example.trainproject.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.GsonJsonParser;
-import org.springframework.boot.json.JsonParseException;
-import org.springframework.boot.json.JsonParser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 @Controller
@@ -45,14 +39,14 @@ public class UserController {
         return "user-page";
     }
 
-    @GetMapping("/{id}")
-    public String userId(@PathVariable("id") long id, Model map) {
-        map.addAttribute("id", userService.getUserById(id));
-        return "add-exercise";
-    }
+//    @GetMapping("/{id}")
+//    public String userId(@PathVariable("id") long id, Model map) {
+//        map.addAttribute("id", userService.getUserById(id));
+//        return "add-exercise";
+//    }
 
-    @GetMapping("addTrain/{id}")
-    public String addTrain(@PathVariable("id") long id, Model map) {
+    @GetMapping("editTrain/{id}")
+    public String editTrain(@PathVariable("id") long id, Model map) {
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         User tempUser = userService.getUserById(id).get();
@@ -63,16 +57,13 @@ public class UserController {
             tempTrain = userService.getUserTrainByDate(tempUser, tempTrain.getDate());
             tempExerciseList = tempTrain.getExercisesList(gson, tempTrain.getExercises());
         }
-//        else {
-//            tempUser.getTrainList().add(tempTrain);
-//            userService.updateUser(tempUser);
-//        }
 
         map.addAttribute("allExercises", exerciseService.getAllExercises());
         map.addAttribute("user", tempUser);
         map.addAttribute("train", tempTrain);
         map.addAttribute("exercise", new Exercise());
         map.addAttribute("userExercises", tempExerciseList);
+        System.out.println("этидТрэйн");
 
         return "add-exercise";
     }
@@ -95,23 +86,13 @@ public class UserController {
             userService.getUserById(id).get().getTrainList().add(tempTrain);
             userService.updateUser(userService.getUserById(id).get());
         }
+        System.out.println("пост айди");
+        return "redirect:editTrain/{id}";
+    }
 
-
-//        if(userService.haveTrainToday(tempUser,tempTrain.getDate())) {
-//            tempTrain = userService.getUserTrainByDate(tempUser,tempTrain.getDate());
-//            String str = tempTrain.getExercises();
-//            tempTrain.setExercisesList(gson.fromJson(str, new TypeToken<ArrayList<Exercise>>(){}.getType()));
-//            tempTrain.getExercisesList().add(tempExercise);
-//            tempTrain.updateTonnage();
-//            tempTrain.setExercises(gson.toJson(tempTrain.getExercisesList()));
-//            trainService.updateTrain(tempTrain);
-//        } else {
-//            tempTrain.getExercisesList().add(tempExercise);
-//            tempTrain.setExercises(gson.toJson(tempTrain.getExercisesList()));
-//            tempTrain.updateTonnage();
-//            tempUser.getTrainList().add(tempTrain);
-//            userService.updateUser(tempUser);
-//        }
-        return "redirect:addTrain/{id}";
+    @PostMapping("delete/{id}/{del}")
+    public String deleteTrain(@PathVariable("del") int del ,@PathVariable("id") long id) {
+        System.out.println("делитПост" + " "+ del + " "+ id);
+        return "redirect:editTrain/{id}";
     }
 }

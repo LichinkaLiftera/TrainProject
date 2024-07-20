@@ -28,9 +28,9 @@
             <form th:method="post" th:action="@{/user/{id}(id=${user.getId()})}">
                 <fieldset>
                     <div class="row" style="height: 60px;background: #a5dde2;">
-                        <div  class="col-auto my-auto" style="width: 200px;">
+                        <div class="col-auto my-auto" style="width: 200px;">
                             <input th:field="*{train.date}" type="date" th:value="${train.getDate()}"
-                                       style="width: 180px;border-width: 1px;border-radius: 5px;">
+                                   style="width: 180px;border-width: 1px;border-radius: 5px;">
                         </div>
                         <div class="col text-start my-auto" style="width: 145px;">
                             <h4 style="width: 140px;">Date</h4>
@@ -38,7 +38,8 @@
                     </div>
                     <div class="row" style="height: 60px;background: #baead6;">
                         <div class="col-auto my-auto" style="width: 200px;">
-                            <select th:field="*{exercise.name}" style="width: 180px;border-width: 1px;border-radius: 5px;">
+                            <select th:field="*{exercise.name}"
+                                    style="width: 180px;border-width: 1px;border-radius: 5px;">
                                 <option th:each="exercises : ${allExercises}"
                                         th:value="${exercises.getName()}"
                                         th:text="${exercises.getName()}"
@@ -60,7 +61,7 @@
                     </div>
                     <div class="row" style="height: 60px;background: #b5e8bf;">
                         <div class="col-auto my-auto" style="width: 200px;">
-                            <input th:field="*{exercise.sets}" type="number"  step="1" min="1" max="100"
+                            <input th:field="*{exercise.sets}" type="number" step="1" min="1" max="100"
                                    style="width: 180px;border-width: 1px;border-radius: 5px;"/>
                         </div>
                         <div class="col my-auto" style="width: 145px;">
@@ -69,7 +70,7 @@
                     </div>
                     <div class="row" style="height: 60px;background: #aadd96;">
                         <div class="col-auto my-auto" style="width: 200px;">
-                            <input th:field="*{exercise.repetitions}" type="number"  step="1" min="1" max="100"
+                            <input th:field="*{exercise.repetitions}" type="number" step="1" min="1" max="100"
                                    style="width: 180px;border-width: 1px;border-radius: 5px;"/>
                         </div>
                         <div class="col my-auto" style="text-align: left;width: 145px;">
@@ -97,12 +98,18 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="exercise : ${userExercises}">
-                        <td th:utext="${exercise.getName()}"></td>
-                        <td th:utext="${exercise.getWeight()}"></td>
-                        <td th:utext="${exercise.getSets()}"></td>
-                        <td th:utext="${exercise.getRepetitions()}"></td>
-                        <td th:utext="${exercise.getTonnage()}"></td>
+                    <tr th:each="exercise,exStat : ${userExercises}">
+                            <td th:utext="${exercise.getName()}"></td>
+                            <td th:utext="${exercise.getWeight()}"></td>
+                            <td th:utext="${exercise.getSets()}"></td>
+                            <td th:utext="${exercise.getRepetitions()}"></td>
+                            <td th:utext="${exercise.getTonnage()}"></td>
+                            <td>
+                                <form th:method="post"
+                                      th:action="@{/user/delete/{id}/{del}(id=${user.getId()},del=${exStat.index})}">
+                                <button class="btn btn-primary" type="submit">Delete</button>
+                                </form>
+                            </td>
                     </tr>
                     </tbody>
                 </table>
