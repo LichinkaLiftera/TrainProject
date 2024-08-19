@@ -4,12 +4,12 @@ import com.example.trainproject.dao.TrainDao;
 import com.example.trainproject.models.Exercise;
 import com.example.trainproject.models.Train;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -37,6 +37,16 @@ public class TrainServiceImpl implements TrainService{
         train.getExercisesList().add(exercise);
         train.updateTonnage();
         train.setExercises(gson.toJson(train.getExercisesList()));
+        trainDao.save(train);
+    }
+
+    @Override
+    public void deleteExercise(Train train, Gson gson, int del) {
+        List<Exercise> tempList = train.getExercisesList(gson, train.getExercises());
+        tempList.remove(del);
+        train.setExercisesList(tempList);
+        train.setExercises(gson.toJson(tempList));
+        train.updateTonnage();
         trainDao.save(train);
     }
 

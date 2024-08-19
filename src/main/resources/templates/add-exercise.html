@@ -86,30 +86,31 @@
             </form>
         </div>
         <div class="col mx-auto">
-            <div class="table-responsive text-start m-auto" style="background: #b5e8bf;">
+            <div class="table-responsive text-start m-auto" style="background: #b5e8bf;max-height: 350px">
                 <table class="table table-striped-columns">
-                    <thead class="shadow-sm" style="background: #96d8af;font-weight: bold;">
+                    <thead class="shadow-sm sticky-top" style="background: #96d8af;font-weight: bold;">
                     <tr>
                         <th>Name</th>
                         <th>Weight (kg)</th>
                         <th>Sets</th>
-                        <th>Rep-ons</th>
+                        <th>Repetitions</th>
                         <th>Tonnage (kg)</th>
+                        <th style="width: 50px"></th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="exercise,exStat : ${userExercises}">
-                            <td th:utext="${exercise.getName()}"></td>
-                            <td th:utext="${exercise.getWeight()}"></td>
-                            <td th:utext="${exercise.getSets()}"></td>
-                            <td th:utext="${exercise.getRepetitions()}"></td>
-                            <td th:utext="${exercise.getTonnage()}"></td>
-                            <td>
-                                <form th:method="post"
-                                      th:action="@{/user/delete/{id}/{del}(id=${user.getId()},del=${exStat.index})}">
-                                <button class="btn btn-primary" type="submit">Delete</button>
-                                </form>
-                            </td>
+                        <td th:utext="${exercise.getName()}"></td>
+                        <td th:utext="${exercise.getWeight()}"></td>
+                        <td th:utext="${exercise.getSets()}"></td>
+                        <td th:utext="${exercise.getRepetitions()}"></td>
+                        <td th:utext="${exercise.getTonnage()}"></td>
+                        <td style="width: 50px">
+                            <form th:method="delete"
+                                  th:action="@{/user/{id}/{del}(id=${user.getId()}, del=${exStat.index})}">
+                                <button class="btn btn-primary" style="height: 25px;width: 45px;margin: 0px;font-size: 14px;padding: 0px 0px;" type="submit">Delete</button>
+                            </form>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

@@ -8,6 +8,7 @@ import com.example.trainproject.service.TrainService;
 import com.example.trainproject.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,12 +64,10 @@ public class UserController {
         map.addAttribute("train", tempTrain);
         map.addAttribute("exercise", new Exercise());
         map.addAttribute("userExercises", tempExerciseList);
-        System.out.println("этидТрэйн");
-
         return "add-exercise";
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("{id}")
     public String recordTrain(@PathVariable("id") long id,
                               @ModelAttribute("train") Train train,
                               @ModelAttribute("exercise") Exercise exercise) {
@@ -86,13 +85,14 @@ public class UserController {
             userService.getUserById(id).get().getTrainList().add(tempTrain);
             userService.updateUser(userService.getUserById(id).get());
         }
-        System.out.println("пост айди");
         return "redirect:editTrain/{id}";
     }
 
-    @PostMapping("delete/{id}/{del}")
-    public String deleteTrain(@PathVariable("del") int del ,@PathVariable("id") long id) {
-        System.out.println("делитПост" + " "+ del + " "+ id);
-        return "redirect:editTrain/{id}";
+    @DeleteMapping("{id}/{del}")
+    public String deleteTrain(@PathVariable("id") long id, @PathVariable("del") int del) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Train tempTrain = userService.getUserTrainByDate(userService.getUserById(id).get(), LocalDate.now().toString());
+        trainService.deleteExercise(tempTrain, gson, del);
+        return "redirect:/user/editTrain/{id}";
     }
 }

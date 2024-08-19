@@ -8,6 +8,7 @@ public interface TrainService {
 
     void createTrain(Train train, Exercise exercise, Gson gson);
     void updateTrain(Train train, Exercise exercise, Gson gson);
+    void deleteExercise(Train train, Gson gson, int del);
     void deleteTrain(long ig);
     Train findByDate(String date);
 }
