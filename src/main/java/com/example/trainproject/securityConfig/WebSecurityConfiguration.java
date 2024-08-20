@@ -32,7 +32,7 @@ public class WebSecurityConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
-        }
+    }
 
     @Bean
     public SecurityFilterChain getSpringSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -52,25 +52,6 @@ public class WebSecurityConfiguration {
         http.logout(logout -> logout.permitAll().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/train"));
 
         return http.build();
-
-
-//        http.formLogin(formLogin -> formLogin.loginPage("/login").successHandler(successHandler).loginProcessingUrl("/login")
-//                .failureUrl("/login-error")
-//                .usernameParameter("p_username")
-//                .passwordParameter("p_password")
-//                .permitAll());
-//
-//        http.authorizeHttpRequests(authz ->authz.requestMatchers("/login").permitAll()
-//                .requestMatchers("/admin/**").hasRole("ADMIN")
-//                .requestMatchers("/user/**").hasRole("USER")
-//                .anyRequest().authenticated());//.permitAll();
-//
-//        http.logout(logout -> logout.permitAll().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                        .logoutSuccessUrl("/login"));
-
-//                .anyRequest().authenticated()//Для остальных действий необходимо пройти аутентификацию
-//                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS); //Если необходимо не изменять id сессии поменять на ALWAYS
-//        return http.build();
     }
 
 

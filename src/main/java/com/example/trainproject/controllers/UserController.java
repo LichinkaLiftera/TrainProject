@@ -8,7 +8,6 @@ import com.example.trainproject.service.TrainService;
 import com.example.trainproject.service.UserService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,11 +39,6 @@ public class UserController {
         return "user-page";
     }
 
-//    @GetMapping("/{id}")
-//    public String userId(@PathVariable("id") long id, Model map) {
-//        map.addAttribute("id", userService.getUserById(id));
-//        return "add-exercise";
-//    }
 
     @GetMapping("editTrain/{id}")
     public String editTrain(@PathVariable("id") long id, Model map) {
