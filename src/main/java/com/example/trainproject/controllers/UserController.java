@@ -38,6 +38,11 @@ public class UserController {
         map.addAttribute("allTrains", userService.findByUsername(principal.getName()).getTrainList());
         return "user-page";
     }
+    @GetMapping("create")
+    public String newUser(){
+        System.out.println("user");
+        return "registration";
+    }
 
 
     @GetMapping("editTrain/{id}")

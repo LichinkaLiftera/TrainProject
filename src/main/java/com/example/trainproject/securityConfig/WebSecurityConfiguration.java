@@ -37,7 +37,7 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain getSpringSecurityFilterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(AbstractHttpConfigurer::disable)
+        http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth->auth.requestMatchers("/registration").permitAll())
                 .formLogin(formLogin -> formLogin.loginPage("/train").successHandler(successHandler).loginProcessingUrl("/train")
                         .failureUrl("/login-error")
                         .usernameParameter("p_username")
